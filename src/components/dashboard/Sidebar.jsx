@@ -18,10 +18,11 @@ export const Sidebar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[240px] sm:w-[300px]">
-            <nav className="flex flex-col gap-4 p-4">
+            <nav className="flex flex-col gap-4 p-4 dashboard-nav">
               {/* Add your sidebar items here */}
               <NavLink
                 to="/dashboard"
+                end
                 className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
               >
                 <Home size={20} />
@@ -62,10 +63,11 @@ export const Sidebar = () => {
 
       {/* Desktop Sidebar (lg and above) */}
       <div className="hidden lg:block w-full max-w-[300px] h-screen bg-background border-r">
-        <nav className="flex flex-col gap-4 p-4">
+        <nav className="flex flex-col gap-4 p-4 dashboard-nav">
           {/* Add your sidebar items here */}
           <NavLink
             to="/dashboard"
+            end
             className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
           >
             <Home size={20} />

@@ -1,4 +1,4 @@
-import { Play, Clock, Star } from "lucide-react";
+import { Play, Clock, Star, MoreVertical, Pencil, Trash } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -14,6 +14,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export const TutorialCard = ({
   title,
@@ -21,6 +27,9 @@ export const TutorialCard = ({
   duration,
   difficulty,
   youtubeLink,
+  isAdmin = false,
+  onEdit,
+  onDelete,
 }) => {
   return (
     <Card className="w-full max-w-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -34,6 +43,31 @@ export const TutorialCard = ({
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
           <Play className="h-12 w-12 text-white" />
         </div>
+        {isAdmin && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 absolute top-1 right-1"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onEdit("123")}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onDelete("123", title)}
+                className="text-red-600"
+              >
+                <Trash className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
       {/* Card Content */}
