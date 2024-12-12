@@ -1,11 +1,11 @@
-import LessonNavigation from "@/components/lesson/LessonCard";
-import TutorialNavigation from "@/components/tutorial/TutorialCard";
+import { HLessons } from "@/components/lesson/HLessons";
+import { HTutorials } from "@/components/tutorial/HTutorials";
 
 export const Home = () => {
   return (
     <div>
-      <LessonNavigation />
-      <TutorialNavigation />
+      <HLessons />
+      <HTutorials />
     </div>
   );
 };

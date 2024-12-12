@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const TutorialCard = ({
+export const TutorialCard = ({
   title,
   thumbnailUrl,
   duration,
@@ -85,43 +85,3 @@ const TutorialCard = ({
     </Card>
   );
 };
-
-// Example usage component
-const TutorialNavigation = () => {
-  const tutorials = [
-    {
-      title: "Japanese Hiragana Basics for Beginners",
-      duration: 15,
-      difficulty: "Beginner",
-      youtubeLink: "https://www.youtube.com/watch?v=example1",
-    },
-    {
-      title: "Essential Japanese Phrases You Must Know",
-      duration: 20,
-      difficulty: "Intermediate",
-      youtubeLink: "https://www.youtube.com/watch?v=example2",
-    },
-    {
-      title: "Japanese Pronunciation Masterclass",
-      duration: 25,
-      difficulty: "Advanced",
-      youtubeLink: "https://www.youtube.com/watch?v=example3",
-    },
-  ];
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {tutorials.map((tutorial, index) => (
-        <TutorialCard
-          key={index}
-          title={tutorial.title}
-          duration={tutorial.duration}
-          difficulty={tutorial.difficulty}
-          youtubeLink={tutorial.youtubeLink}
-        />
-      ))}
-    </div>
-  );
-};
-
-export default TutorialNavigation;

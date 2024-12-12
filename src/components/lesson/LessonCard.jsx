@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
-import { BookOpen, Check, Lock } from "lucide-react";
+import {
+  BookOpen,
+  Check,
+  Lock,
+  MoreVertical,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -10,6 +17,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export const LessonCard = ({
   lessonNumber,
@@ -18,6 +31,8 @@ export const LessonCard = ({
   isCompleted = false,
   isLocked = false,
   isAdmin = false,
+  onEdit,
+  onDelete,
 }) => {
   return (
     <Card className="w-full max-w-sm hover:shadow-lg transition-shadow duration-300">
@@ -34,11 +49,14 @@ export const LessonCard = ({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onEdit("123")}>
                   <Pencil className="mr-2 h-4 w-4" />
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem
+                  onClick={() => onDelete("123", lessonName)}
+                  className="text-red-600"
+                >
                   <Trash className="mr-2 h-4 w-4" />
                   Delete
                 </DropdownMenuItem>
@@ -101,47 +119,3 @@ export const LessonCard = ({
     </Card>
   );
 };
-
-// Example usage component
-const LessonNavigation = () => {
-  const lessons = [
-    {
-      number: 1,
-      name: "Basic Greetings",
-      vocabularyCount: 15,
-      completed: false,
-      locked: false,
-    },
-    {
-      number: 2,
-      name: "Numbers and Counting",
-      vocabularyCount: 20,
-      completed: true,
-      locked: false,
-    },
-    {
-      number: 3,
-      name: "Daily Phrases",
-      vocabularyCount: 25,
-      completed: false,
-      locked: true,
-    },
-  ];
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {lessons.map((lesson) => (
-        <LessonCard
-          key={lesson.number}
-          lessonNumber={lesson.number}
-          lessonName={lesson.name}
-          vocabularyCount={lesson.vocabularyCount}
-          isCompleted={lesson.completed}
-          isLocked={lesson.locked}
-        />
-      ))}
-    </div>
-  );
-};
-
-export default LessonNavigation;

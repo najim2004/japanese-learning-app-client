@@ -2,6 +2,7 @@ import { App } from "@/App";
 import { Dashboard } from "@/pages/dashboard/Dashboard";
 import { DHome } from "@/pages/dashboard/pages/home/DHome";
 import { DLessons } from "@/pages/dashboard/pages/lessons/DLessons";
+import { DVocabulary } from "@/pages/dashboard/pages/vocabulary/DVocabulary";
 import { Home } from "@/pages/home/Home";
 import { Lessons } from "@/pages/lessons/Lessons";
 import { SingleLesson } from "@/pages/lessons/SingleLesson";
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/lessons",
         element: <DLessons />,
+      },
+      {
+        path: "/dashboard/vocabulary",
+        element: <DVocabulary />,
       },
     ],
   },
