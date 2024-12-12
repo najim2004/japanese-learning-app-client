@@ -5,6 +5,10 @@
 ## Overview
 JapaLearn24 is an interactive web application designed to help users learn Japanese language efficiently and effectively. Visit our live site at [JapaLearn24](https://japalearn24.web.app).
 
+## Repository Links
+- Client: [Frontend Repository](https://github.com/najim2004/japanese-learning-app-client)
+- Server: [Backend Repository](https://github.com/najim2004/japanese-learning-app-server)
+
 ## Features
 - Interactive learning modules
 - Japanese character recognition
@@ -47,9 +51,8 @@ npm start
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-[Your chosen license]
+MIT
 
 ## Contact
-- Website: [https://japalearn24.web.app](https://japalearn24.web.app)
-- Email: [Your contact email]
-- GitHub: [Your GitHub profile]
+- Website: [https://najim-dev.vercel.app](https://najim-dev.vercel.app)
+- GitHub: [https://github.com/najim2004](https://github.com/najim2004)

@@ -43,16 +43,6 @@ const Navbar = ({ isLoggedIn, isAdmin }) => {
               </Link>
             </>
           )}
-
-          {isAdmin && (
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
-            >
-              <Home size={20} />
-              Dashboard
-            </Link>
-          )}
         </>
       ) : (
         <>
