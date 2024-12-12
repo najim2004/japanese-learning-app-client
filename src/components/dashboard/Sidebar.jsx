@@ -18,17 +18,43 @@ export const Sidebar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[240px] sm:w-[300px]">
-            <nav className="flex flex-col gap-4 mt-8">
+            <nav className="flex flex-col gap-4 p-4">
               {/* Add your sidebar items here */}
-              <a href="#" className="text-sm hover:underline">
-                Menu Item 1
-              </a>
-              <a href="#" className="text-sm hover:underline">
-                Menu Item 2
-              </a>
-              <a href="#" className="text-sm hover:underline">
-                Menu Item 3
-              </a>
+              <NavLink
+                to="/dashboard"
+                className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
+              >
+                <Home size={20} />
+                Dashboard
+              </NavLink>
+              <NavLink
+                to="/dashboard/lessons"
+                className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
+              >
+                <BookOpen size={20} />
+                Lessons
+              </NavLink>
+              <NavLink
+                to="/dashboard/vocabulary"
+                className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
+              >
+                <Text size={20} />
+                Vocabulary
+              </NavLink>
+              <NavLink
+                to="/dashboard/tutorials"
+                className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
+              >
+                <Video size={20} />
+                Tutorials
+              </NavLink>
+              <NavLink
+                to="/dashboard/users"
+                className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
+              >
+                <Users size={20} />
+                Users
+              </NavLink>
             </nav>
           </SheetContent>
         </Sheet>
