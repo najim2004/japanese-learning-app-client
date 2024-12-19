@@ -6,6 +6,7 @@ import { store } from "./redux/store";
 import { router } from "./routes/Router";
 import { RouterProvider } from "react-router-dom";
 import { App } from "./App";
+import { Toaster } from "./components/ui/toaster";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById("root")).render(
       <RouterProvider router={router}>
         <App />
       </RouterProvider>
+      <Toaster />
     </Provider>
   </StrictMode>
 );

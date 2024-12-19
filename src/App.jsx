@@ -5,7 +5,7 @@ import Footer from "./components/footer/Footer";
 export const App = () => {
   return (
     <div>
-      <Navbar isLoggedIn={true} />
+      <Navbar />
       <Outlet />
       <Footer />
     </div>

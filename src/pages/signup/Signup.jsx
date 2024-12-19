@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaEyeSlash, FaRegEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -19,24 +19,74 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { useCreateUserMutation } from "@/redux/service/userApi";
+import { useToast } from "@/hooks/use-toast";
+
+const formatData = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (reader.result) {
+        resolve(reader.result);
+      } else {
+        reject("Failed to read file");
+      }
+    };
+    reader.onerror = () => reject("File reading error");
+    reader.readAsDataURL(file);
+  });
+};
 
 export const Signup = () => {
   const [viewPassword, setViewPassword] = React.useState(false);
   const [fileName, setFileName] = React.useState("");
+  const { toast } = useToast();
+  const navigator = useNavigate();
+  const [onSignup, { isLoading }] = useCreateUserMutation();
 
   const form = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      fullName: "",
       email: "",
       password: "",
       photo: undefined,
     },
   });
 
+  const handleToast = (res) => {
+    if (res?.success) {
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.msg || "Account created successfully",
+      });
+      navigator("/login");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res?.msg || "Failed to create account",
+      });
+    }
+  };
+
   const onSubmit = async (data) => {
-    console.log(data);
-    // Add your signup logic here
+    try {
+      const imageFile = data.photo;
+      const formImage = await formatData(imageFile);
+      const response = await onSignup({
+        name: data.fullName,
+        email: data.email,
+        password: data.password,
+        photo: formImage,
+      }).unwrap();
+      handleToast(response);
+    } catch (err) {
+      handleToast({
+        success: false,
+        msg: err?.data?.message || "An error occurred",
+      });
+    }
   };
 
   const togglePasswordView = () => {
@@ -76,29 +126,13 @@ export const Signup = () => {
                 {/* First Name Input */}
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="fullName"
                   rules={{ required: true }}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Your First Name</FormLabel>
+                      <FormLabel>Your Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter first name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Last Name Input */}
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Last Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter last name" {...field} />
+                        <Input placeholder="Enter full name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -161,12 +195,13 @@ export const Signup = () => {
                   render={() => (
                     <FormItem>
                       <FormLabel className="w-full p-2 border-2 border-dashed flex justify-center items-center rounded-md">
-                        Upload Your Photo
+                        {fileName || "Upload Profile Photo"}
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="file"
                           className="hidden"
+                          accept="image/*"
                           onChange={handleFileChange}
                         />
                       </FormControl>
@@ -175,8 +210,8 @@ export const Signup = () => {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
-                  Sign Up
+                <Button disabled={isLoading} type="submit" className="w-full">
+                  {isLoading ? "Loading..." : "Sign Up"}
                 </Button>
               </form>
             </Form>
