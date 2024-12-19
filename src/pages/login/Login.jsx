@@ -1,5 +1,5 @@
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -19,9 +19,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useLoginUserMutation } from "@/redux/service/userApi";
+import { useToast } from "@/hooks/use-toast";
 
 export const Login = () => {
   const [viewPassword, setViewPassword] = useState(false);
+  const { toast } = useToast();
+  const [onLogin, { isLoading }] = useLoginUserMutation();
+  const navigator = useNavigate();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -29,8 +34,37 @@ export const Login = () => {
     },
   });
 
+  const handleToast = (res) => {
+    if (res?.success) {
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.msg || "Account Logged In Successfully",
+      });
+      navigator("/");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res?.msg || "Failed to login account",
+      });
+    }
+  };
+
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      const res = await onLogin({
+        email: data?.email,
+        password: data?.password,
+      }).unwrap();
+      handleToast(res);
+    } catch (err) {
+      console.error(err);
+      handleToast({
+        success: false,
+        msg: err?.data?.message || "An error occurred",
+      });
+    }
   };
 
   return (
@@ -104,8 +138,8 @@ export const Login = () => {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
-                  Login
+                <Button disabled={isLoading} type="submit" className="w-full">
+                  {isLoading ? "Loading..." : "Login"}
                 </Button>
               </form>
             </Form>

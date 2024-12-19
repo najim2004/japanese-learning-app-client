@@ -10,9 +10,12 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["Users"],
     }),
 
-    getUserById: builder.query({
-      query: (id) => `/users/${id}`,
-      providesTags: (result, error, id) => [{ type: "Users", id }],
+    getUser: builder.mutation({
+      query: () => ({
+        url: "/getuser",
+        method: "POST",
+      }),
+      //   providesTags: ["GetUser"],
     }),
 
     createUser: builder.mutation({
@@ -21,6 +24,20 @@ export const userApi = baseApi.injectEndpoints({
         method: "POST",
         body: newUser,
       }),
+    }),
+
+    loginUser: builder.mutation({
+      query: (credentials) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: credentials,
+      }),
+      transformResponse: (response) => {
+        // Assuming the token is in response.token
+        localStorage.setItem("token", response.token);
+        return response;
+      },
+      //   invalidatesTags: ["GetUser"],
     }),
 
     updateUser: builder.mutation({
@@ -39,7 +56,8 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetUsersQuery,
-  useGetUserByIdQuery,
+  useGetUserMutation,
   useUpdateUserMutation,
   useCreateUserMutation,
+  useLoginUserMutation,
 } = userApi;
