@@ -1,3 +1,4 @@
+import { loginFailure, loginStart, loginSuccess } from "../slices/userSlice";
 import { baseApi } from "./baseApi";
 
 export const userApi = baseApi.injectEndpoints({
@@ -10,20 +11,34 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["Users"],
     }),
 
-    getUser: builder.mutation({
-      query: () => ({
-        url: "/getuser",
-        method: "POST",
-      }),
-      //   providesTags: ["GetUser"],
-    }),
-
     createUser: builder.mutation({
       query: (newUser) => ({
         url: "/auth/register",
         method: "POST",
         body: newUser,
       }),
+      invalidatesTags: ["Users"],
+    }),
+
+    getUser: builder.mutation({
+      query: () => ({
+        url: "/getuser",
+        method: "POST",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        dispatch(loginStart());
+        try {
+          const { data } = await queryFulfilled;
+          data?.success
+            ? dispatch(loginSuccess(data.user))
+            : dispatch(loginFailure({ error: data?.message }));
+        } catch (error) {
+          const errorMessage = error?.error?.data?.msg || "An error occurred";
+          dispatch(loginFailure({ error: errorMessage }));
+          console.error("GetUser Error:", error);
+        }
+      },
+      providesTags: ["GetUser"],
     }),
 
     loginUser: builder.mutation({
@@ -33,11 +48,22 @@ export const userApi = baseApi.injectEndpoints({
         body: credentials,
       }),
       transformResponse: (response) => {
-        // Assuming the token is in response.token
-        localStorage.setItem("token", response.token);
+        if (response?.token) {
+          localStorage.setItem("token", response.token);
+        }
         return response;
       },
-      //   invalidatesTags: ["GetUser"],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data?.token) {
+            await dispatch(baseApi.endpoints.getUser.initiate()).unwrap();
+          }
+        } catch (error) {
+          console.error("Authentication Error:", error);
+        }
+      },
+      invalidatesTags: ["GetUser"],
     }),
 
     updateUser: builder.mutation({

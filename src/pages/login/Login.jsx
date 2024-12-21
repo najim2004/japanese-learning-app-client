@@ -19,14 +19,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useLoginUserMutation } from "@/redux/service/userApi";
+import {
+  useGetUserMutation,
+  useLoginUserMutation,
+} from "@/redux/service/userApi";
 import { useToast } from "@/hooks/use-toast";
+import { useSelector } from "react-redux";
 
 export const Login = () => {
   const [viewPassword, setViewPassword] = useState(false);
   const { toast } = useToast();
   const [onLogin, { isLoading }] = useLoginUserMutation();
   const navigator = useNavigate();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -41,7 +46,7 @@ export const Login = () => {
         title: "Success",
         description: res.msg || "Account Logged In Successfully",
       });
-      navigator("/");
+      // navigator("/");
     } else {
       toast({
         variant: "destructive",

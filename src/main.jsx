@@ -7,15 +7,18 @@ import { router } from "./routes/Router";
 import { RouterProvider } from "react-router-dom";
 import { App } from "./App";
 import { Toaster } from "./components/ui/toaster";
+import { InitialDataFetcher } from "./components/InitialDataFetcher";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     {/* Wrap App with Provider and pass the Redux store */}
 
     <Provider store={store}>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
+      <InitialDataFetcher>
+        <RouterProvider router={router}>
+          <App />
+        </RouterProvider>
+      </InitialDataFetcher>
       <Toaster />
     </Provider>
   </StrictMode>

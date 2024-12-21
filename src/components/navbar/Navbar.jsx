@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, BookOpen, Video, LogIn, UserPlus, Menu, X } from "lucide-react";
+import {
+  Home,
+  BookOpen,
+  Video,
+  LogIn,
+  UserPlus,
+  Menu,
+  X,
+  LogOut,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,20 +18,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useSelector } from "react-redux";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const Navbar = ({ isLoggedIn, isAdmin }) => {
+const Navbar = ({ isAdmin }) => {
+  const userState = useSelector((state) => state.user);
+  console.log(userState);
   const NavLinks = () => (
     <div className="flex flex-col md:flex-row gap-4">
-      {isLoggedIn ? (
+      {userState.isAuthenticated ? (
         <>
           {!isAdmin && (
             <>
@@ -55,11 +67,11 @@ const Navbar = ({ isLoggedIn, isAdmin }) => {
           </Link>
 
           <Link
-            to="/register"
+            to="/signup"
             className="flex items-center gap-2 p-2 hover:bg-accent hover:text-accent-foreground rounded"
           >
             <UserPlus size={20} />
-            Register
+            Sign Up
           </Link>
         </>
       )}
@@ -75,8 +87,46 @@ const Navbar = ({ isLoggedIn, isAdmin }) => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-4">
-          <NavLinks />
+        <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center space-x-4">
+            <NavLinks />
+          </div>
+          {userState.isAuthenticated && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
+                  <Avatar className="size-10">
+                    <AvatarImage
+                      src={userState.user?.photo.url || ""}
+                      alt="user avatar"
+                    />
+                    <AvatarFallback>
+                      {userState.user?.name?.[0] || "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1 text-center">
+                    <p className="text-sm font-medium">
+                      {userState.user?.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {userState.user?.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuItem className="text-red-500">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
 
         {/* Mobile Navigation */}

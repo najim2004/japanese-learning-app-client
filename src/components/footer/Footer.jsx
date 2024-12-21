@@ -17,7 +17,7 @@ const Footer = () => {
       <div className="px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           {/* App Description */}
-          <div className="flex flex-col items-center text-center">
+          <div className="flex flex-col items-start">
             <h3 className="text-xl font-bold mb-4">日本語 Learn</h3>
             <p className="text-sm text-muted-foreground">
               An interactive platform designed to make learning Japanese
@@ -58,7 +58,7 @@ const Footer = () => {
           </div>
 
           {/* Social Media */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-end">
             <h4 className="font-semibold mb-4">Connect With Us</h4>
             <div className="flex space-x-4">
               <TooltipProvider>
