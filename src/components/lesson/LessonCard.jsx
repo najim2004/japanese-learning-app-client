@@ -28,6 +28,7 @@ export const LessonCard = ({
   lessonNumber,
   lessonName,
   vocabularyCount,
+  lessonDescription,
   isCompleted = false,
   isLocked = false,
   isAdmin = false,
@@ -90,8 +91,7 @@ export const LessonCard = ({
           </div>
         ) : (
           <div className="text-sm text-muted-foreground">
-            Learn essential Japanese vocabulary and improve your language
-            skills.
+            {lessonDescription}
           </div>
         )}
       </CardContent>

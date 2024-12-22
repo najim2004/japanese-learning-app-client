@@ -24,14 +24,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Navbar = ({ isAdmin }) => {
   const userState = useSelector((state) => state.user);
-  console.log(userState);
   const NavLinks = () => (
     <div className="flex flex-col md:flex-row gap-4">
       {userState.isAuthenticated ? (

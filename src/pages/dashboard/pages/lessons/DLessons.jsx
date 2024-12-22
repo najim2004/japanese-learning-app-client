@@ -1,6 +1,11 @@
 import { AddLessonBtn } from "@/components/lesson/AddLessonBtn";
 import { LessonCard } from "@/components/lesson/LessonCard";
 import { LessonForm } from "@/components/lesson/LessonForm";
+import { useToast } from "@/hooks/use-toast";
+import {
+  useCreateLessonMutation,
+  useGetLessonsByAdminQuery,
+} from "@/redux/service/lessonApi";
 import { useEffect, useState } from "react";
 
 export const DLessons = () => {
@@ -8,15 +13,10 @@ export const DLessons = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [lessonName, setLessonName] = useState("");
-  const lessons = [
-    {
-      number: 1,
-      name: "Basic Greetings",
-      vocabularyCount: 15,
-      completed: false,
-      locked: false,
-    },
-  ];
+  const [onCreateLesson, { isLoading: mutationLoading, isError }] =
+    useCreateLessonMutation();
+  const { data } = useGetLessonsByAdminQuery();
+  const { toast } = useToast();
   useEffect(() => {
     if (!open) {
       setIsEdit(false);
@@ -34,18 +34,56 @@ export const DLessons = () => {
     setOpen(true);
     setLessonName(lessonName);
   };
+
+  const handleToast = (res) => {
+    if (res?.success) {
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.msg || "Lesson created successfully",
+      });
+      setOpen(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res?.msg || "Failed to create lesson",
+      });
+    }
+  };
+
+  const onSubmit = async (data) => {
+    if (!isEdit && !isDelete) {
+      try {
+        const {
+          lesson_name: name,
+          lesson_number: lessonNumber,
+          lesson_description: description,
+        } = data;
+        const res = await onCreateLesson({
+          name,
+          lessonNumber,
+          description,
+        }).unwrap();
+        handleToast(res);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    // if (isEdit && !isDelete) {
+    // }
+  };
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
         <AddLessonBtn setOpen={setOpen} />
-        {lessons.map((lesson) => (
+        {data?.data?.lessons?.map((lesson) => (
           <LessonCard
-            key={lesson.number}
-            lessonNumber={lesson.number}
+            key={lesson?._id}
+            lessonNumber={lesson?.lessonNumber}
             lessonName={lesson.name}
-            vocabularyCount={lesson.vocabularyCount}
-            isCompleted={lesson.completed}
-            isLocked={lesson.locked}
+            lessonDescription={lesson?.description}
+            vocabularyCount={lesson?.vocabularyCount}
             isAdmin={true}
             onEdit={onEdit}
             onDelete={onDelete}
@@ -53,6 +91,7 @@ export const DLessons = () => {
         ))}
       </div>
       <LessonForm
+        onSubmit={onSubmit}
         open={open}
         setOpen={setOpen}
         isEdit={isEdit}

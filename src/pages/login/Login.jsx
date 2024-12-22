@@ -46,7 +46,7 @@ export const Login = () => {
         title: "Success",
         description: res.msg || "Account Logged In Successfully",
       });
-      // navigator("/");
+      navigator("/");
     } else {
       toast({
         variant: "destructive",

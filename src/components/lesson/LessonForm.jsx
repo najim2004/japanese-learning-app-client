@@ -20,6 +20,7 @@ import {
 
 export const LessonForm = ({
   open,
+  onSubmit,
   setOpen,
   isEdit = false,
   isDelete = false,
@@ -45,6 +46,7 @@ export const LessonForm = ({
           </DialogDescription>
         </DialogHeader>
         <ProfileForm
+          onSubmit={onSubmit}
           isDelete={isDelete}
           isEdit={isEdit}
           lessonName={lessonName}
@@ -55,6 +57,7 @@ export const LessonForm = ({
 };
 
 function ProfileForm({
+  onSubmit,
   className,
   isEdit = false,
   isDelete = false,
@@ -63,18 +66,19 @@ function ProfileForm({
   const defaultValues = {
     lesson_name: "",
     lesson_number: "",
+    lesson_description: "",
   };
 
   const form = useForm({ defaultValues });
 
-  const onSubmit = async (values) => {
-    try {
-      // TODO: Implement API call here
-      console.log(values);
-    } catch (error) {
-      console.error("Failed to submit form:", error);
-    }
-  };
+  // const onSubmit = async (values) => {
+  //   try {
+  //     // TODO: Implement API call here
+  //     console.log(values);
+  //   } catch (error) {
+  //     console.error("Failed to submit form:", error);
+  //   }
+  // };
 
   return (
     <Form {...form}>
@@ -107,30 +111,52 @@ function ProfileForm({
           )}
         />
         {!isDelete && (
-          <FormField
-            control={form.control}
-            name="lesson_number"
-            rules={{
-              required: "Lesson number is required",
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Please enter a valid number",
-              },
-            }}
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormLabel>Lesson Number</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter lesson number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <>
+            <FormField
+              control={form.control}
+              name="lesson_description"
+              rules={{
+                required: "Lesson description is required",
+                minLength: {
+                  value: 40,
+                  message: "Lesson name must be at least 40 characters",
+                },
+              }}
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Lesson Description</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter lesson description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lesson_number"
+              rules={{
+                required: "Lesson number is required",
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Please enter a valid number",
+                },
+              }}
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Lesson Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter lesson number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
         )}
         <Button type="submit">
           {isDelete ? "Delete" : isEdit ? "Save changes" : "Create"}
