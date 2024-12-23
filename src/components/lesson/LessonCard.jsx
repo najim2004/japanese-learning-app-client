@@ -25,6 +25,7 @@ import {
 } from "../ui/dropdown-menu";
 
 export const LessonCard = ({
+  id,
   lessonNumber,
   lessonName,
   vocabularyCount,
@@ -50,12 +51,12 @@ export const LessonCard = ({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onEdit("123")}>
+                <DropdownMenuItem onClick={() => onEdit(id)}>
                   <Pencil className="mr-2 h-4 w-4" />
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => onDelete("123", lessonName)}
+                  onClick={() => onDelete(id, lessonName)}
                   className="text-red-600"
                 >
                   <Trash className="mr-2 h-4 w-4" />

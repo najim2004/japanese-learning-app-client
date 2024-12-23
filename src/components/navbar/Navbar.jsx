@@ -9,6 +9,7 @@ import {
   Menu,
   X,
   LogOut,
+  LayoutDashboardIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -121,6 +122,12 @@ const Navbar = ({ isAdmin }) => {
                 <DropdownMenuItem className="text-red-500">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/dashboard" className="flex items-center gap-2">
+                    <LayoutDashboardIcon className="h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -10,7 +10,6 @@ export const Vocabulary = () => {
       pronunciation: "Konnichiwa",
       meaning: "Hello (daytime greeting)",
       whenToSay: "Used as a standard greeting during the day",
-      audioSrc: "/path/to/audio/konnichiwa.mp3",
     },
   ];
 

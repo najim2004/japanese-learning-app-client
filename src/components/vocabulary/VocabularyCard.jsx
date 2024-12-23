@@ -30,9 +30,16 @@ export const VocabularyCard = ({
   pronunciation,
   meaning,
   whenToSay,
-  audioSrc,
 }) => {
-  const { play: playPronunciation, isPlaying } = useAudio(audioSrc);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handleTextToSpeech = () => {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = "ja-JP";
+    setIsPlaying(true);
+    utterance.onend = () => setIsPlaying(false);
+    window.speechSynthesis.speak(utterance);
+  };
 
   return (
     <Card className="w-full max-w-[1000px] mx-auto transform transition-all">
@@ -47,7 +54,7 @@ export const VocabularyCard = ({
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={playPronunciation}
+                    onClick={handleTextToSpeech}
                     disabled={isPlaying}
                   >
                     {isPlaying ? (

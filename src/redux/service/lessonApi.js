@@ -2,7 +2,6 @@ import { baseApi } from "./baseApi";
 
 export const lessonApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Define your endpoints here
     getLessons: builder.query({
       query: () => "/lessons",
     }),
@@ -23,16 +22,18 @@ export const lessonApi = baseApi.injectEndpoints({
     }),
     updateLesson: builder.mutation({
       query: ({ id, ...lesson }) => ({
-        url: `/lessons/${id}`,
-        method: "PUT",
+        url: `/admin/lessons/${id}`,
+        method: "PATCH",
         body: lesson,
       }),
+      invalidatesTags: ["AdminLessons"],
     }),
     deleteLesson: builder.mutation({
       query: (id) => ({
-        url: `/lessons/${id}`,
+        url: `/admin/lessons/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["AdminLessons"],
     }),
   }),
 });

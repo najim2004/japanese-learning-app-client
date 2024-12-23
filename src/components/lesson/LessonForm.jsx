@@ -25,6 +25,9 @@ export const LessonForm = ({
   isEdit = false,
   isDelete = false,
   lessonName,
+  lessonNumber,
+  lessonDescription,
+  isLoading,
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -50,6 +53,9 @@ export const LessonForm = ({
           isDelete={isDelete}
           isEdit={isEdit}
           lessonName={lessonName}
+          lessonNumber={lessonNumber}
+          lessonDescription={lessonDescription}
+          isLoading={isLoading}
         />
       </DialogContent>
     </Dialog>
@@ -62,13 +68,15 @@ function ProfileForm({
   isEdit = false,
   isDelete = false,
   lessonName,
+  lessonNumber,
+  lessonDescription,
+  isLoading,
 }) {
   const defaultValues = {
-    lesson_name: "",
-    lesson_number: "",
-    lesson_description: "",
+    lesson_name: isEdit && !isDelete ? lessonName : "",
+    lesson_number: isEdit ? lessonNumber : null,
+    lesson_description: isEdit ? lessonDescription : "",
   };
-
   const form = useForm({ defaultValues });
 
   // const onSubmit = async (values) => {
@@ -158,8 +166,14 @@ function ProfileForm({
             />
           </>
         )}
-        <Button type="submit">
-          {isDelete ? "Delete" : isEdit ? "Save changes" : "Create"}
+        <Button disabled={isLoading} type="submit">
+          {isLoading
+            ? "Loading..."
+            : isDelete
+            ? "Delete"
+            : isEdit
+            ? "Save changes"
+            : "Create"}
         </Button>
       </form>
     </Form>
