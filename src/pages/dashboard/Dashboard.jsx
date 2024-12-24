@@ -15,7 +15,7 @@ export const Dashboard = () => {
   return (
     <div className="">
       <Navbar isAdmin={true} isLoggedIn={true} />
-      <div className="min-h-screen flex">
+      <div className="flex">
         <Sidebar />
         {/* Main Content */}
         <div className="flex-1">

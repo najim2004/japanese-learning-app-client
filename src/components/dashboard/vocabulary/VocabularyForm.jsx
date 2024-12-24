@@ -33,6 +33,7 @@ export const VocabularyForm = ({
   isDelete = false,
   onSubmit,
   isLoading,
+  defaultVocValues,
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,6 +59,7 @@ export const VocabularyForm = ({
           isEdit={isEdit}
           onSubmit={onSubmit}
           isLoading={isLoading}
+          defaultVocValues={defaultVocValues}
         />
       </DialogContent>
     </Dialog>
@@ -70,6 +72,7 @@ const VocabularyUpdateForm = ({
   isDelete = false,
   onSubmit,
   isLoading,
+  defaultVocValues,
 }) => {
   const lessonsName = useSelector((state) => state?.lesson?.lessonsName);
   const defaultValues = isDelete
@@ -77,11 +80,11 @@ const VocabularyUpdateForm = ({
         confirm: "",
       }
     : {
-        word: "",
-        pronunciation: "",
-        whenToSay: "",
-        meaning: "",
-        lessonId: "",
+        word: defaultVocValues?.word || "",
+        pronunciation: defaultVocValues?.pronunciation || "",
+        whenToSay: defaultVocValues?.whenToSay || "",
+        meaning: defaultVocValues?.meaning || "",
+        lessonId: defaultVocValues?.lessonId || "",
       };
 
   const form = useForm({ defaultValues });

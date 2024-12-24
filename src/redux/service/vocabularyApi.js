@@ -22,7 +22,7 @@ export const vocabularyApi = baseApi.injectEndpoints({
     }),
     updateVocabulary: builder.mutation({
       query: ({ id, ...updatedVocabulary }) => ({
-        url: `/admin/vocabulary/${id}`,
+        url: `/admin/vocabularies/${id}`,
         method: "PATCH",
         body: updatedVocabulary,
       }),
@@ -30,7 +30,7 @@ export const vocabularyApi = baseApi.injectEndpoints({
     }),
     deleteVocabulary: builder.mutation({
       query: (id) => ({
-        url: `/admin/vocabulary/${id}`,
+        url: `/admin/vocabularies/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["AdminVocabularies"],

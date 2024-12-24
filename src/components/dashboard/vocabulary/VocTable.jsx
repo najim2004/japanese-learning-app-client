@@ -28,7 +28,7 @@ export const VocTable = ({ vocabularies, onUpdate, onDelete }) => {
         <TableBody>
           {vocabularies?.map((vocabulary) => (
             <VocabularyTableRow
-              key={vocabulary.id}
+              key={vocabulary._id}
               vocabulary={vocabulary}
               onDelete={onDelete}
               onEdit={onUpdate}
