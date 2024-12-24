@@ -17,12 +17,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useSelector } from "react-redux";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const VocabularyForm = ({
   open,
   setOpen,
   isEdit = false,
   isDelete = false,
+  onSubmit,
+  isLoading,
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,13 +53,25 @@ export const VocabularyForm = ({
               : "Fill out the necessary information for your new lesson."}
           </DialogDescription>
         </DialogHeader>
-        <VocabularyUpdateForm isDelete={isDelete} isEdit={isEdit} />
+        <VocabularyUpdateForm
+          isDelete={isDelete}
+          isEdit={isEdit}
+          onSubmit={onSubmit}
+          isLoading={isLoading}
+        />
       </DialogContent>
     </Dialog>
   );
 };
 
-function VocabularyUpdateForm({ className, isEdit = false, isDelete = false }) {
+const VocabularyUpdateForm = ({
+  className,
+  isEdit = false,
+  isDelete = false,
+  onSubmit,
+  isLoading,
+}) => {
+  const lessonsName = useSelector((state) => state?.lesson?.lessonsName);
   const defaultValues = isDelete
     ? {
         confirm: "",
@@ -58,19 +80,11 @@ function VocabularyUpdateForm({ className, isEdit = false, isDelete = false }) {
         word: "",
         pronunciation: "",
         whenToSay: "",
-        lessonNo: "",
+        meaning: "",
+        lessonId: "",
       };
 
   const form = useForm({ defaultValues });
-
-  const onSubmit = async (values) => {
-    try {
-      // TODO: Implement API call here
-      console.log(values);
-    } catch (error) {
-      console.error("Failed to submit form:", error);
-    }
-  };
 
   return (
     <Form {...form}>
@@ -118,6 +132,20 @@ function VocabularyUpdateForm({ className, isEdit = false, isDelete = false }) {
 
             <FormField
               control={form.control}
+              name="meaning"
+              rules={{ required: "Word meaning is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Word Meaning</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter word meaning" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="whenToSay"
               rules={{ required: "Usage description is required" }}
               render={({ field }) => (
@@ -133,24 +161,28 @@ function VocabularyUpdateForm({ className, isEdit = false, isDelete = false }) {
 
             <FormField
               control={form.control}
-              name="lessonNo"
-              rules={{
-                required: "Lesson number is required",
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: "Please enter a valid number",
-                },
-              }}
+              name="lessonId"
+              rules={{ required: "Lesson number is required" }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Lesson Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter lesson number"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel>Lesson</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select lesson" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {lessonsName?.map((lesson) => (
+                        <SelectItem key={lesson._id} value={lesson._id}>
+                          {lesson.lessonNumber}: {lesson.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -173,10 +205,16 @@ function VocabularyUpdateForm({ className, isEdit = false, isDelete = false }) {
           />
         )}
 
-        <Button type="submit">
-          {isDelete ? "Delete" : isEdit ? "Save changes" : "Create"}
+        <Button disabled={isLoading} type="submit">
+          {isLoading
+            ? "Loading..."
+            : isDelete
+            ? "Delete"
+            : isEdit
+            ? "Save changes"
+            : "Create"}
         </Button>
       </form>
     </Form>
   );
-}
+};

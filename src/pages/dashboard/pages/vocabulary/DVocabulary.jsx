@@ -2,14 +2,27 @@ import { VocabularyForm } from "@/components/dashboard/vocabulary/VocabularyForm
 import { VocTable } from "@/components/dashboard/vocabulary/VocTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import {
+  useAddVocabularyMutation,
+  useGetVocabulariesQuery,
+} from "@/redux/service/vocabularyApi";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 export const DVocabulary = () => {
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+
+  const { toast } = useToast();
+
+  const { data: vocsResponse, isLoading: isVocsLoading } =
+    useGetVocabulariesQuery();
+
+  const [onCreateVocabulary, { isLoading: isCreateLoading }] =
+    useAddVocabularyMutation();
+
   useEffect(() => {
     if (!open) {
       setIsEdit(false);
@@ -24,6 +37,42 @@ export const DVocabulary = () => {
   const onDelete = (id, lessonName) => {
     setIsDelete(true);
     setOpen(true);
+  };
+
+  const handleToast = (res) => {
+    if (res?.success) {
+      toast({
+        variant: "default",
+        title: "Success",
+        description: res.msg || "Lesson created successfully",
+      });
+      setOpen(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res?.msg || "Failed to create lesson",
+      });
+    }
+  };
+
+  const onSubmit = async (data) => {
+    // lessonId:"676942578694491a896a2e39" meaning:"Hello (used during the day)" pronunciation:"Kon'nichiwa" whenToSay:"When greeting someone during the day" word: "こんにちは"
+    if (!isEdit && !isDelete && data) {
+      const { word, pronunciation, whenToSay, meaning, lessonId } = data;
+      try {
+        const res = await onCreateVocabulary({
+          word,
+          pronunciation,
+          whenToSay,
+          meaning,
+          lessonId,
+        }).unwrap();
+        handleToast(res);
+      } catch (error) {
+        console.log("Error creating vocabulary:", error);
+      }
+    }
   };
   return (
     <div>
@@ -43,7 +92,7 @@ export const DVocabulary = () => {
         </Button>
       </div>
       <VocTable
-        vocabularies={dummyData}
+        vocabularies={vocsResponse?.vocabularies}
         onDelete={onDelete}
         onUpdate={onEdit}
       />
@@ -52,33 +101,9 @@ export const DVocabulary = () => {
         setOpen={setOpen}
         isDelete={isDelete}
         isEdit={isEdit}
+        onSubmit={onSubmit}
+        isLoading={isCreateLoading}
       />
     </div>
   );
 };
-const dummyData = [
-  {
-    id: 1,
-    word: "こんにちは",
-    meaning: "Hello/Good afternoon",
-    pronunciation: "Konnichiwa",
-    whenToSay: "Afternoon greeting",
-    lessonNo: 1,
-  },
-  {
-    id: 2,
-    word: "おはよう",
-    meaning: "Good morning",
-    pronunciation: "Ohayou",
-    whenToSay: "Morning greeting",
-    lessonNo: 1,
-  },
-  {
-    id: 3,
-    word: "さようなら",
-    meaning: "Goodbye",
-    pronunciation: "Sayounara",
-    whenToSay: "When parting ways",
-    lessonNo: 2,
-  },
-];

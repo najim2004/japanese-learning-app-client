@@ -158,7 +158,7 @@ export const DLessons = () => {
         lessonName={lessonName}
         lessonNumber={lessonNumber}
         lessonDescription={lessonDescription}
-        isLoading={mutationLoading || deleteLoading}
+        isLoading={mutationLoading || deleteLoading || updateLoading}
       />
     </>
   );
